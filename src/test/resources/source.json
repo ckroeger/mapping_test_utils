@@ -1,0 +1,29 @@
+{
+  "id": {
+    "value": "7627ee2c-9cdb-4162-9681-28dcffbe8a6e"
+  },
+  "street": {
+    "value": "Rathausmarkt",
+    "maxLength": null
+  },
+  "houseNumber": {
+    "value": "1",
+    "maxLength": null
+  },
+  "city": {
+    "value": "Hamburg, Freie und Hansestadt",
+    "maxLength": null
+  },
+  "postalCode": {
+    "value": "20095",
+    "maxLength": null
+  },
+  "country": {
+    "value": "DE",
+    "maxLength": null
+  },
+  "poBox": {
+    "value": "",
+    "maxLength": null
+  }
+}
