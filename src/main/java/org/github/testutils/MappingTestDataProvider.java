@@ -1,6 +1,10 @@
 package org.github.testutils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CellValue;
@@ -10,10 +14,18 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -42,7 +54,37 @@ public class MappingTestDataProvider {
             .toArray(Object[][]::new);
    }
 
-   public static List<Map<String, Object>> createArgsFromExcelAsMap(String pathToFile, String sheetName) throws IOException {
+   private static <T> JAXBElement<T> getJaxbElement(Class<T> targetType, String elementName, T targetElement) {
+      final QName qname = new QName(null, elementName);
+      return new JAXBElement<>(qname, targetType, null, targetElement);
+   }
+
+
+   private static <T> Marshaller createMarshaller(Class<T> clazz) throws JAXBException {
+      JAXBContext context = JAXBContext.newInstance(clazz);
+      Marshaller mar = context.createMarshaller();
+      mar.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+      return mar;
+   }
+
+   private static <T> Document createXmlDocument(Class<T> marshallingClass, JAXBElement<T> jaxbElement) throws ParserConfigurationException, JAXBException, IOException, SAXException {
+      // Put JAXB element into StringWriter
+      StringWriter stringWriter = new StringWriter();
+      createMarshaller(marshallingClass)
+            .marshal(jaxbElement, stringWriter);
+
+      // Create Document based on xml string
+      String xml = stringWriter.toString();
+      InputSource source = new InputSource(new StringReader(xml));
+      return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(source);
+   }
+
+   public static <T> Document getDocument(T targetObject, String jaxbElementName, Class<T> typeClass) throws ParserConfigurationException, JAXBException, IOException, SAXException {
+      JAXBElement<T> targetJaxbElement = getJaxbElement(typeClass, jaxbElementName, targetObject);
+      return createXmlDocument(typeClass, targetJaxbElement);
+   }
+
+   private static List<Map<String, Object>> createArgsFromExcelAsMap(String pathToFile, String sheetName) throws IOException {
       List<Map<String, Object>> testDataList = new ArrayList<>();
 
       try (FileInputStream fis = new FileInputStream(pathToFile);

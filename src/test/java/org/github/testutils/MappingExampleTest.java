@@ -1,6 +1,5 @@
 package org.github.testutils;
 
-import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
 import org.github.testutils.model.mapper.AddressMapper;
 import org.github.testutils.model.source.SourceAddress;
@@ -29,7 +28,7 @@ class MappingExampleTest {
 
       if (assertMapping) {
          // Given
-         // The cell values for the current row
+         // The cell values for the current row by column name
          String sourceJsonPath = MappingTestComparisonUtil.getCellValueByColumnName(testData, "Source (Json Path)");
          String targetXpath = MappingTestComparisonUtil.getCellValueByColumnName(testData, "Target (XPath)");
          String constant = MappingTestComparisonUtil.getCellValueByColumnName(testData, "DEFAULT");
@@ -43,17 +42,12 @@ class MappingExampleTest {
          TargetAddress targetAddress = AddressMapper.mapToTargetAddress(sourceAddress);
 
          // Then
-         //  Get the source value according to its jsonPath
-         String expectedTargetValue = MappingTestComparisonUtil.determineExpectedTargetValue(sourceJsonPath, sourceAddress, constant);
-
-         // Get the target value according to its xPath
-         JAXBElement<TargetAddress> targetJaxbElement = MappingTestComparisonUtil.getJaxbElement(TargetAddress.class, "Address", targetAddress);
-         Document xmlDocument = MappingTestComparisonUtil.createXmlDocument(TargetAddress.class, targetJaxbElement);
-         Object targetValue = MappingTestComparisonUtil.evaluateXpathExpression(xmlDocument, targetXpath);
+         // Create an XML document from the targetObject
+         Document xmlDocument = MappingTestDataProvider.getDocument(targetAddress, "Address", TargetAddress.class);
 
          // Compare the source value with the target value, if no default constant is given
-         // Else compare the target value with the given default value
-         MappingTestComparisonUtil.checkTargetValueMatchesExpectedValue(xmlDocument, expectedTargetValue, targetXpath, targetValue);
+         // Else compare the target value with the constant value
+         MappingTestComparisonUtil.assertSpecification(xmlDocument, sourceAddress, sourceJsonPath, targetXpath, constant);
       }
    }
 
