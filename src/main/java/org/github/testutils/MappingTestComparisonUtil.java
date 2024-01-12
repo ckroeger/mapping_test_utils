@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import org.assertj.core.api.Assertions;
+import org.junit.platform.commons.util.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -32,7 +33,10 @@ public class MappingTestComparisonUtil {
       return testDataList.stream()
             .filter(testData -> testData.containsKey(columnName))
             .findFirst()
-            .map(testData -> testData.get(columnName))
+            .map(testData -> {
+               var value = testData.get(columnName);
+               return StringUtils.isBlank(value) ? "" : String.valueOf(value);
+            })
             .orElseThrow(NoSuchElementException::new);
    }
 
@@ -40,10 +44,13 @@ public class MappingTestComparisonUtil {
          throws IOException, XPathExpressionException {
       //  Get the source value according to its jsonPath or the defined constant
       String expectedTargetValue = MappingTestComparisonUtil.determineExpectedTargetValue(sourceJsonPath, sourceObject, constant);
+      assertSpecification(xmlDocument, targetXpath, expectedTargetValue);
+   }
 
+   public static void assertSpecification(Document xmlDocument, String targetXpath, String expectedTargetValue)
+         throws XPathExpressionException {
       // Get the target value according to its xPath
       Object targetValue = MappingTestComparisonUtil.evaluateXpathExpression(xmlDocument, targetXpath);
-
       MappingTestComparisonUtil.checkTargetValueMatchesExpectedValue(xmlDocument, expectedTargetValue, targetXpath, targetValue);
    }
 
@@ -51,8 +58,6 @@ public class MappingTestComparisonUtil {
       if (targetXpath.endsWith("/text()")) {
          MappingTestComparisonUtil.checkValueMatchesSpecification(targetValue, expectedTargetValue);
       } else if (targetXpath.matches(".*/@.+")) {
-         String xPathWithoutAttribute = MappingTestComparisonUtil.removeAttributeFromXPath(targetXpath);
-         MappingTestComparisonUtil.elementExistsInXmlDocument(xmlDocument, xPathWithoutAttribute);
          MappingTestComparisonUtil.checkValueMatchesSpecification(targetValue, expectedTargetValue);
       } else {
          MappingTestComparisonUtil.elementExistsInXmlDocument(xmlDocument, targetXpath);
@@ -60,7 +65,7 @@ public class MappingTestComparisonUtil {
    }
 
    private static String determineExpectedTargetValue(String sourceJsonPath, Object sourceObject, String constant) throws JsonProcessingException {
-      if (("CONSTANT".equals(sourceJsonPath) || sourceJsonPath == null || "null".equals(sourceJsonPath))
+      if (("CONSTANT".equals(sourceJsonPath) || sourceJsonPath == null || sourceJsonPath.isBlank() || "null".equals(sourceJsonPath))
             && (constant != null || !constant.isEmpty())) {
          return constant;
       }
@@ -80,7 +85,7 @@ public class MappingTestComparisonUtil {
       return null;
    }
 
-   private static Object evaluateXpathExpression(Document xmlDocument, String xPathExpression) throws XPathExpressionException {
+   public static Object evaluateXpathExpression(Document xmlDocument, String xPathExpression) throws XPathExpressionException {
       XPath xPath = XPathFactory.newInstance().newXPath();
       return xPath.evaluate(xPathExpression, xmlDocument);
    }
@@ -101,9 +106,4 @@ public class MappingTestComparisonUtil {
          Assertions.fail("Error while checking element existence in XML document for XPath %s", xPath);
       }
    }
-
-   private static String removeAttributeFromXPath(String xPath) {
-      return xPath.substring(0, xPath.lastIndexOf("/@"));
-   }
-
 }
