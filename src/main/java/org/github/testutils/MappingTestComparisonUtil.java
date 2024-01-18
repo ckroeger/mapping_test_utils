@@ -3,14 +3,10 @@ package org.github.testutils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import org.assertj.core.api.Assertions;
 import org.junit.platform.commons.util.StringUtils;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.io.IOException;
@@ -20,7 +16,6 @@ import java.util.NoSuchElementException;
 import java.util.logging.Logger;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MappingTestComparisonUtil {
 
@@ -50,14 +45,12 @@ public class MappingTestComparisonUtil {
    public static void assertSpecification(Document xmlDocument, String targetXpath, String expectedTargetValue)
          throws XPathExpressionException {
       // Get the target value according to its xPath
-      Object targetValue = MappingTestComparisonUtil.evaluateXpathExpression(xmlDocument, targetXpath);
+      String targetValue = MappingTestComparisonUtil.evaluateXpathExpression(xmlDocument, targetXpath);
       MappingTestComparisonUtil.checkTargetValueMatchesExpectedValue(xmlDocument, expectedTargetValue, targetXpath, targetValue);
    }
 
-   private static void checkTargetValueMatchesExpectedValue(Document xmlDocument, String expectedTargetValue, String targetXpath, Object targetValue) {
-      if (targetXpath.endsWith("/text()")) {
-         MappingTestComparisonUtil.checkValueMatchesSpecification(targetValue, expectedTargetValue);
-      } else if (targetXpath.matches(".*/@.+")) {
+   private static void checkTargetValueMatchesExpectedValue(Document xmlDocument, String expectedTargetValue, String targetXpath, Object targetValue) throws XPathExpressionException {
+      if (targetXpath.endsWith("/text()") || targetXpath.matches(".*/@.+")) {
          MappingTestComparisonUtil.checkValueMatchesSpecification(targetValue, expectedTargetValue);
       } else {
          MappingTestComparisonUtil.elementExistsInXmlDocument(xmlDocument, targetXpath);
@@ -85,25 +78,19 @@ public class MappingTestComparisonUtil {
       return null;
    }
 
-   public static Object evaluateXpathExpression(Document xmlDocument, String xPathExpression) throws XPathExpressionException {
+   public static String evaluateXpathExpression(Document xmlDocument, String xPathExpression) throws XPathExpressionException {
       XPath xPath = XPathFactory.newInstance().newXPath();
-      return xPath.evaluate(xPathExpression, xmlDocument);
+      String evaluationResult = xPath.evaluate(xPathExpression, xmlDocument);
+      return StringUtils.isBlank(evaluationResult) ? null : evaluationResult;
    }
 
    private static void checkValueMatchesSpecification(Object valueFromXPath, String valueFromSource) {
       assertThat(valueFromXPath).isEqualTo(valueFromSource);
    }
 
-   private static void elementExistsInXmlDocument(Object xmlDocument, String xPath) {
-      try {
-         Document document = (Document) xmlDocument;
-         XPathFactory xPathFactory = XPathFactory.newInstance();
-         XPath xpath = xPathFactory.newXPath();
-         XPathExpression expr = xpath.compile(xPath);
-         NodeList nodeList = (NodeList) expr.evaluate(document, XPathConstants.NODESET);
-         assertTrue(nodeList.getLength() > 0);
-      } catch (Exception var7) {
-         Assertions.fail("Error while checking element existence in XML document for XPath %s", xPath);
-      }
+   private static void elementExistsInXmlDocument(Document xmlDocument, String xPath) throws XPathExpressionException {
+      String targetXPathExists = String.format("boolean(%s)", xPath);
+      assertThat(evaluateXpathExpression(xmlDocument, targetXPathExists)).isEqualTo("true");
    }
+
 }
