@@ -4,6 +4,7 @@ on:
   push:
     # Publish semver tags as releases.
     tags: ["v*.*.*"]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -27,7 +28,7 @@ jobs:
       - name: cat settings
         run: cat /home/runner/.m2/settings.xml
       - name: dump env
-        run: env
+        run: echo "ddd ${MAVEN_USERNAME}"
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
