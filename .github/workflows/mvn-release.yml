@@ -4,7 +4,6 @@ on:
   push:
     # Publish semver tags as releases.
     tags: ["v*.*.*"]
-  workflow_dispatch:
 
 jobs:
   build:
@@ -27,16 +26,8 @@ jobs:
         run: echo "REVISION=${{ github.ref_name }}" | sed 's/v//' >> $GITHUB_ENV
       - name: cat settings
         run: cat /home/runner/.m2/settings.xml
-      - name: dump env
-        run: echo "ddd ${MAVEN_USERNAME}"
-        env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-
       - name: Deploy with Maven
-        run: mvn -B -ntp clean verify
-          -Drevision=$REVISION -Prelease
+        run: mvn -B -ntp clean deploy -Drevision=$REVISION -Prelease
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
