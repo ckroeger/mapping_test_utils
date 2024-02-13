@@ -20,6 +20,6 @@ jobs:
       - name: set version
         run: git describe --tags --abbrev=0 |sed 's/v\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)/\3/' | xargs echo 1 + | bc | xargs -I{} echo REVISION={} >> $GITHUB_ENV
       - name: Build
-        run: mvn -B clean compile -Drevision="$REVISION-SNAPSHOT"
+        run: mvn -B -ntp clean compile -Drevision="$REVISION-SNAPSHOT"
       - name: Test
-        run: mvn -B test -Drevision="$REVISION-SNAPSHOT"
+        run: mvn -B -ntp test -Drevision="$REVISION-SNAPSHOT"
