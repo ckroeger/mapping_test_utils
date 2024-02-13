@@ -24,8 +24,10 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: set version
         run: echo "REVISION=${{ github.ref_name }}" | sed 's/v//' >> $GITHUB_ENV
-      - name: set version
+      - name: cat settings
         run: cat /home/runner/.m2/settings.xml
+      - name: dump env
+        run: env
 
       - name: Deploy with Maven
         run: mvn -B -ntp clean verify
