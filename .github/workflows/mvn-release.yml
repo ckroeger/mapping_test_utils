@@ -27,7 +27,7 @@ jobs:
       - name: cat settings
         run: cat /home/runner/.m2/settings.xml
       - name: Deploy with Maven
-        run: mvn -B -ntp clean deploy -Drevision=$REVISION -Prelease
+        run: mvn -e -B -ntp clean deploy -Drevision=$REVISION -Prelease
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
