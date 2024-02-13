@@ -28,6 +28,10 @@ jobs:
         run: cat /home/runner/.m2/settings.xml
       - name: dump env
         run: env
+        env:
+          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
       - name: Deploy with Maven
         run: mvn -B -ntp clean verify
