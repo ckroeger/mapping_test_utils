@@ -26,7 +26,7 @@ jobs:
         run: echo "REVISION=${{ github.ref_name }}" | sed 's/v//' >> $GITHUB_ENV
 
       - name: Deploy with Maven
-        run: mvn -B clean deploy -Drevision=$REVISION -Prelease
+        run: mvn -B -ntp clean deploy -Drevision=$REVISION -Prelease
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
