@@ -9,6 +9,8 @@
     <version>${revision}</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <packaging>jar</packaging>
+    <description>A library to support testing support for mapping</description>
+    <url>https://github.com/arena-libs/mapping-test-utils</url>
 
     <licenses>
         <license>
