@@ -1,4 +1,4 @@
-package org.github.testutils.model.target;
+package io.github.arena_libs.test_utils.model.target;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -7,15 +7,15 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlType
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Province {
+public class Country {
 
-    @XmlElement(name = "ISOCode")
+    @XmlElement(name = "ISOCodeA2")
     String isoCode;
 
-    public Province() {
+    public Country() {
     }
 
-    public Province(String isoCode) {
+    public Country(String isoCode) {
         this.isoCode = isoCode;
     }
 

@@ -1,4 +1,4 @@
-package org.github.testutils.model.target;
+package io.github.arena_libs.test_utils.model.target;
 
 
 import jakarta.xml.bind.annotation.XmlAccessType;

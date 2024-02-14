@@ -1,4 +1,4 @@
-package org.github.testutils;
+package io.github.arena_libs.test_utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

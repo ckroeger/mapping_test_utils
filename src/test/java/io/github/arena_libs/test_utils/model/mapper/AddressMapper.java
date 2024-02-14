@@ -1,11 +1,11 @@
-package org.github.testutils.model.mapper;
+package io.github.arena_libs.test_utils.model.mapper;
 
-import org.github.testutils.model.source.SourceAddress;
-import org.github.testutils.model.source.ValueProperty;
-import org.github.testutils.model.source.ValueWithMaxPropery;
-import org.github.testutils.model.target.AddressType;
-import org.github.testutils.model.target.Country;
-import org.github.testutils.model.target.TargetAddress;
+import io.github.arena_libs.test_utils.model.source.ValueProperty;
+import io.github.arena_libs.test_utils.model.source.ValueWithMaxPropery;
+import io.github.arena_libs.test_utils.model.target.AddressType;
+import io.github.arena_libs.test_utils.model.target.Country;
+import io.github.arena_libs.test_utils.model.target.TargetAddress;
+import io.github.arena_libs.test_utils.model.source.SourceAddress;
 
 public class AddressMapper {
 

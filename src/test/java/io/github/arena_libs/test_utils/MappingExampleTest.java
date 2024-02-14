@@ -1,9 +1,9 @@
-package org.github.testutils;
+package io.github.arena_libs.test_utils;
 
+import io.github.arena_libs.test_utils.model.mapper.AddressMapper;
+import io.github.arena_libs.test_utils.model.source.SourceAddress;
+import io.github.arena_libs.test_utils.model.target.TargetAddress;
 import jakarta.xml.bind.JAXBException;
-import org.github.testutils.model.mapper.AddressMapper;
-import org.github.testutils.model.source.SourceAddress;
-import org.github.testutils.model.target.TargetAddress;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;

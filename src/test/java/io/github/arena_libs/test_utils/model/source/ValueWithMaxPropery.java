@@ -1,4 +1,4 @@
-package org.github.testutils.model.source;
+package io.github.arena_libs.test_utils.model.source;
 
 public class ValueWithMaxPropery {
 
