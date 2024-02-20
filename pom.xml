@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.github.arena-libs</groupId>
+    <groupId>io.github.ckroeger</groupId>
     <artifactId>mapping_test_utils</artifactId>
     <version>${revision}</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <packaging>jar</packaging>
     <description>A library to support testing support for mapping</description>
-    <url>https://github.com/arena-libs/mapping-test-utils</url>
+    <url>https://github.com/ckroeger/mapping_test_utils</url>
 
     <licenses>
         <license>
@@ -31,9 +31,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git@github.com:arena-libs/mapping-test-utils.git</connection>
-        <developerConnection>scm:git@github.com:arena-libs/mapping-test-utils.git</developerConnection>
-        <url>https://github.com/arena-libs/mapping-test-utils/tree/main</url>
+        <connection>scm:git@github.com:ckroeger/mapping_test_utils.git</connection>
+        <developerConnection>scm:git@github.com:ckroeger/mapping_test_utils.git</developerConnection>
+        <url>https://github.com/ckroeger/mapping_test_utils/tree/main</url>
     </scm>
 
     <distributionManagement>
