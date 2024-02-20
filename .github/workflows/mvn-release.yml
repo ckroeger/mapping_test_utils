@@ -8,7 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: release
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -24,6 +23,8 @@ jobs:
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
       - name: set version
         run: echo "REVISION=${{ github.ref_name }}" | sed 's/v//' >> $GITHUB_ENV
+      - name: set version
+        run: echo "OSSRH_USERNAME=${{ secrets.OSSRH_USERNAME }}"
       - name: cat settings
         run: cat /home/runner/.m2/settings.xml
       - name: Deploy with Maven
