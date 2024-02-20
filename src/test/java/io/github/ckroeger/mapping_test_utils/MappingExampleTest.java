@@ -1,8 +1,8 @@
-package io.github.arena_libs.test_utils;
+package io.github.ckroeger.mapping_test_utils;
 
-import io.github.arena_libs.test_utils.model.mapper.AddressMapper;
-import io.github.arena_libs.test_utils.model.source.SourceAddress;
-import io.github.arena_libs.test_utils.model.target.TargetAddress;
+import io.github.ckroeger.mapping_test_utils.model.mapper.AddressMapper;
+import io.github.ckroeger.mapping_test_utils.model.source.SourceAddress;
+import io.github.ckroeger.mapping_test_utils.model.target.TargetAddress;
 import jakarta.xml.bind.JAXBException;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;

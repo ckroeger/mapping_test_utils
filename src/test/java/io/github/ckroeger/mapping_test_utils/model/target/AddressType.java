@@ -1,4 +1,4 @@
-package io.github.arena_libs.test_utils.model.target;
+package io.github.ckroeger.mapping_test_utils.model.target;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;

@@ -1,4 +1,4 @@
-package io.github.arena_libs.test_utils;
+package io.github.ckroeger.mapping_test_utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

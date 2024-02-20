@@ -1,4 +1,4 @@
-package io.github.arena_libs.test_utils.model.source;
+package io.github.ckroeger.mapping_test_utils.model.source;
 
 public class ValueWithMaxPropery {
 
